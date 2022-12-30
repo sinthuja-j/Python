@@ -1,0 +1,99 @@
+#import country file that contains function to initialize, represent countires as well as some helper methods
+from country import Country
+#countrycatalogue function that uses data file to create country objects and store them in a catalogue
+class CountryCatalogue():
+    #initlize the country objects using the data file
+    def __init__(self, cntryFileName):
+        self._file= open(cntryFileName, "r", encoding= "utf-8")
+        #create the country catalogue that stores the country objects
+        self._countryCat= {}
+        self._file.readline()
+        #read in the data from the file
+        for line in self._file:
+            line= line.strip()
+            line= line.split("|", 3)
+            country_name= line[0]
+            country_continent= line[1]
+            country_pop= line[3]
+            country_area= line[2]
+            #use the Country function from country class to create the country object
+            self._country_info= Country(country_name, country_area, country_pop, country_continent)
+            #add the country object to the country file
+            self._countryCat[line[0]]= self._country_info
+        #close the file to save space
+        self._file.close()
+    #function to set the population of a country
+    def setPopulation(self, country, population):
+        for item in self._countryCat:
+           if item == (country.getName()):
+               self._countryCat[item].setPopulation(population)
+    #function to set the area of a country
+    def setArea (self, country, area):
+        for item in self._countryCat:
+           if item == country.getName():
+               self._countryCat[item].setArea(area)
+    #function to set the continent of a country
+    def setContinent (self, country, continent):
+        for item in self._countryCat:
+           if item == country.getName():
+               self._countryCat[item].setContinent(continent)
+    #function to find a country
+    def findCountry(self, country):
+        found=0
+        for item in self._countryCat:
+           if item == country.getName():
+               found= 1
+        #if the country is found it returns the country else it returns none
+        if found == 0:
+            return None
+        else:
+            return country
+    #function to add a country to the catalogue
+    def addCountry (self, name, population, area, continent):
+        c1= Country(name, population, area, continent)
+        check= False
+        #if the country exists it returns False, else it adds the country
+        for item in self._countryCat:
+            if item == name:
+                check= False
+                return check
+            else:
+                check= True
+        #adds the country to the catalogue
+        if check != False:
+            self._countryCat[name]= c1
+    #function that uses the repr function in Country to print the catalogue to the user
+    def printCountryCatalogue(self):
+        super().__repr__()
+        for item in self._countryCat:
+            print(self._countryCat[item])
+    #function that saves the catalogue to a file that is chosen by the user
+    def saveCountryCatalogue(self, fname):
+        file= open(fname, "w")
+        for country in sorted(self._countryCat):
+            output= "%s|%s|%s|%s\n" % (self._countryCat[country].getName(), self._countryCat[country].getContinent(), self._countryCat[country].getPopulation(), self._countryCat[country].getArea())
+            file.write(output)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
